@@ -1,0 +1,412 @@
+#include<iostream.h>
+#include<conio.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<fstream.h>
+#include<process.h>
+
+class accounts{                               // class for file accounts
+   char name[20];
+   struct address{
+      int house_no;
+      char street_name[20];
+      char state[20];
+      char country[20];
+   }add;
+   char password[20];
+
+   public:
+
+   void get_data(){                         //inline function
+      cout<<"\n Name: \t ";
+      gets(name);
+      cout<<"\n Address";
+      cout<<"\n House Number: \t";
+      cin>> add.house_no;
+      cout<<"\n Street Name: \t";
+      gets(add.street_name);
+      cout<<"\n State: \t";
+      gets(add.state);
+      cout<<"\n Country: \t";
+      gets(add.country);
+				       /*setting up password of
+					 at least 10 characters*/
+      cout<<"\n Password: \t";
+      gets(password);
+
+      while(strlen(password)<10){
+         cout<<"\nPassword Strength:LOW!!!\nPassword must be at least 10 characters";
+         cout<<"\n Password: \t";
+         gets(password);
+      }
+   }
+
+   void show_data(){
+      cout<<"\n NAME: \t";
+      puts(name);
+      cout<<"\n ADDRESS";
+      cout<<" \n House Number: \t"<<add.house_no;
+      cout<<"\n Street Name: \t";
+      puts(add.street_name);
+      cout<<"\n State: \t";
+      puts(add.state);
+      cout<<"\n Country: \t";
+      puts(add.country);
+   }
+
+   char* ret_password(){
+      return password;
+   }
+
+   char* ret_name(){
+      return name;
+   }
+}s;
+
+   void sign_up(){                      //function called in main for sign_up
+      ofstream ofile;
+      ofile.open("acc.dat",ios::app);
+      s.get_data();
+      ofile.write((char*)&s,sizeof(s));
+      ofile.close();
+      cout<<"\n Congratulations! Your Account Has Been Created\n";
+   }
+
+   void view_profile(char search_password[20]){    /*function called
+   						in main in login*/
+      ifstream ifile;
+      ifile.open("acc.dat");
+      while(ifile.read((char*)&s,sizeof(s))){
+      if(strcmp(s.ret_password(),search_password)==0)
+         s.show_data();
+      }
+      ifile.close();
+   }
+
+class book{         //class for file books
+   char b_name[40];
+   char genre[20];
+   char author[40];
+   int b_code;
+   int price;
+
+   public:
+
+   book(){
+      b_code=0;
+   }
+
+   void get_data(){
+      cout<<"\n Book Name: \t";
+      gets(b_name);
+      cout<<"Genre: \t";
+      gets(genre);
+      cout<<"Name Of The Author: \t";
+      gets(author);
+      cout<<"Price: \t";
+      cin>>price;
+      ++b_code;
+      cout<<"Assigned Book Code:\t"<<b_code;
+   }
+
+   void show_data(){
+      cout<<"\n Book Name: \t";
+      puts(b_name);
+      cout<<"Genre: \t";
+      puts(genre);
+      cout<<"Name Of The Author: \t";
+      puts(author);
+      cout<<"Price: \t";
+      cout<<price;
+      cout<<"\t Assigned Book Code:\t"<<b_code<<"\n";
+   }
+
+   char* ret_b_name(){
+      return b_name;
+   }
+
+   char* ret_author(){
+      return author;
+   }
+
+   char* ret_genre(){
+      return genre;
+   }
+
+   int ret_price(){
+      return price;
+   }
+
+}b;
+
+void sell(){        // function called in main in login
+
+   ofstream ofile;
+   ofile.open("books.dat",ios::app);
+   b.get_data();
+   ofile.write((char*)&b,sizeof(b));
+   ofile.close();
+
+   cout<<"\n Congratulations! Your book has been added to the stock \n";
+
+}
+
+int search_b_name(char search_book[20]){    //function called in search_books
+
+   int flag=0;
+   cout<<"\n Enter the name of the book you want: \t";
+   gets(search_book);
+
+   ifstream ifile;
+   ifile.open("books.dat");
+   while(ifile.read((char*)&b,sizeof(b))){
+      if(strcmp(b.ret_b_name(),search_book)==0){
+         b.show_data(); flag=1;
+      }
+   }
+   ifile.close();
+
+   if(flag==0)
+      cout<<"\n Book doesn't exist in the stock currently";
+   return flag;
+}
+
+void search_author(){            //function called in search_books
+
+   int flag=0;
+   char search_author[20];
+   cout<<"\n Enter the name of the author whose books you want: \t";
+   gets(search_author);
+   ifstream ifile;
+   ifile.open("books.dat");
+   while(ifile.read((char*)&b,sizeof(b))){
+      if(strcmp(b.ret_author(),search_author)==0){
+         b.show_data();   flag=1;
+      }
+   }
+   ifile.close();
+   if(flag==0)
+      cout<<"\n Book doesn't exist in the stock currently";
+}
+
+void search_genre(){                  //function called in search_books
+   int flag=0;
+   char search_genre[20];
+   cout<<"\n Enter the genre of the books you want: \t";
+   gets(search_genre);
+   ifstream ifile;
+   ifile.open("books.dat");
+   while(ifile.read((char*)&b,sizeof(b))){
+      if(strcmp(b.ret_genre(),search_genre)==0){
+         b.show_data();
+         flag=1;
+      }
+   }
+   ifile.close();
+   if(flag==0)
+      cout<<"\n Book doesn't exist in the stock currently";
+}
+
+void search_price(){              //function called in search_books
+   int c4;                         //choice
+   int search_price;
+   cout<<"\n1. Search for fixed price";
+   cout<<"\n2. Search for prices below a value\n3. Exit\n";
+   cin >>c4;
+   int flag=0;
+
+   switch(c4){
+      case 1:
+      cout<<"\n Enter the price of the books you want: \t";
+	   cin>>search_price;
+	   ifstream ifile;
+	   ifile.open("books.dat");
+	   while(ifile.read((char*)&b,sizeof(b))){
+	      if(b.ret_price()==search_price){
+            b.show_data();
+            flag=1;
+         }
+	   }
+	   ifile.close();
+	   if(flag==0)
+	      cout<<"\n Book doesn't exist in the stock currently";
+	   break;
+
+      case 2:
+      cout<<"\n Enter the maximum price of the books you want: \t";
+	   cin>>search_price;
+	   ifstream file;
+	   file.open("books.dat");
+	   while(file.read((char*)&b,sizeof(b))){
+	      if(b.ret_price()<=search_price){
+            b.show_data();
+            flag=1;
+         }
+	   }
+	   file.close();
+	   if(flag==0)
+	      cout<<"\n Book doesn't exist in the stock currently";
+	   break;
+
+      case 3:
+      exit(1);
+	   break;
+
+      default:
+      cout<<"\n WRONG CHOICE!!!!\n";
+	   break;
+   }
+}
+
+void show_all_books(){            //function called in search_books
+   ifstream ifile;
+   ifile.open("books.dat");
+   while(ifile.read((char*)&b,sizeof(b)));
+   b.show_data();
+   ifile.close();
+}
+
+void search_books(){            //function called in main in login
+   char ch='y';
+   char search_book[20];
+   int c3;                       //choice
+   while(ch=='y'||ch=='Y'){
+      cout<<"\n 1. Search by name of the book";
+      cout<<"\n 2. Search by name of the author";
+      cout<<"\n 3. Search by genre";
+      cout<<"\n 4. Search by price";
+      cout<<"\n 5. Show all the books";
+      cout<<"\n 6. Exit \n";
+      cin>>c3;
+
+      switch(c3){
+         case 1:search_b_name(search_book);
+	      break;
+         case 2:search_author();
+	      break;
+         case 3:search_genre();
+	      break;
+         case 4:search_price();
+	      break;
+         case 5:show_all_books();
+	      break;
+         case 6:exit(1);
+	      break;
+         default:cout<<"\n WRONG CHOICE!!! \n";
+	      break;
+      }
+
+      cout<<"\n Do you want to search again?(y/n)\t";
+      cin>>ch;
+   }
+}
+
+void delete_book(char buy_book[20]){         //function called in buy
+   ifstream ifile;
+   ifile.open("books.dat");
+   ofstream ofile;
+   ofile.open("temp.dat");
+   while(ifile.read((char*)&b,sizeof(b))){
+      if(strcmp(b.ret_b_name(),buy_book)!=0)
+         ofile.write((char*)&b,sizeof(b));
+   }
+   ifile.close();
+   ofile.close();
+   remove("books.dat");
+   rename("temp.dat","books.dat");
+}
+
+void buy(){                   //function called in main in login
+   char ch='y';
+   int flag;
+   char buy_book[20];
+
+   while(ch=='y'||ch=='Y'){
+      flag= search_b_name(buy_book);
+      if(flag==0){
+         cout<<"\nDo you want to buy some other book existing in the stock(y/n)\t";
+         cin>>ch;
+      }
+      else{
+         cout<<"\n Congratulations! You bought the Book";
+         delete_book(buy_book);
+         cout<<"\n Do you want to buy one more book?(y/n) \t";
+         cin>>ch;
+      }
+   }
+}
+
+void main(){                         //main function; main window in program
+   clrscr();
+   cout<<"\t\t\t\t READER'S PARADISE \n";
+   int c1,c2;                                    //choices
+   int flag1=0,flag2=0;
+
+   while(1){
+      cout<<"\n 1. LOGIN  \t  2. SIGN UP \t 3. EXIT \n";
+      cin>>c1;
+
+      switch(c1){
+         case 1:
+         char check_ps[20],name[20];   //searching account with password
+	      cout<<"\n Enter Name: \t";
+	      gets(name);
+
+	      ifstream ifile;
+	      ifile.open("acc.dat");
+	      while(ifile.read((char*)&s,sizeof(s))){
+	         if(strcmp(s.ret_name(),name)==0){
+	            flag1=1;
+	            cout<<"\n Enter Password: \t";
+	            for(int i=0;i<=strlen(s.ret_password());i++){
+	               check_ps[i]=getch();
+	               cout<<"*";
+	            }
+	            if(strcmp(check_ps,s.ret_password())==0)
+	               flag2=1;
+	         }
+	      }
+	      ifile.close();
+
+	      if(flag1==0)
+	         cout<<"\n No account with this name exists";
+
+	      if(flag2==0 && flag1==1)
+	         cout<<"\n WRONG PASSWORD! ACCOUNT DOESN'T EXIST \n";
+
+	      while(flag2==1){
+	         cout<<"\n1. View profile\n2. Sell Book\n3. Buy Book";
+	         cout<<"\n4. Search for books in the stock\n5. Logout\n";
+	         cin>>c2;
+	         switch(c2){
+	            case 1: view_profile(check_ps);
+		         break;
+	            case 2: sell();
+		         break;
+	            case 3: buy();
+		         break;
+	            case 4: search_books();
+		         break;
+	            case 5: flag2=2;
+		         break;
+	            default:cout<<"\n WRONG CHOICE!!!! \n ";
+		         break;
+	         }
+	      }
+	      break;
+
+         case 2: sign_up();
+	      break;
+
+         case 3: exit(1);
+	      break;
+
+         default: cout<<"\n WRONG CHOICE!!!! \n";
+	      break;
+      }
+
+   };
+
+   getch();
+}
