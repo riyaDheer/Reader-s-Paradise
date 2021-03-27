@@ -5,11 +5,11 @@ If the user enters 2, they enter sign up. The user enters their name, address an
 
 If you enter 1, you enter login. It needs the correct combination of the user’s username and password to open their account. By entering a wrong password for your name, the user sees an error message saying “WRONG PASSWORD! ACCOUNT DOESN’T EXIST”. 
 Once you are logged in to your account, you get 5 options – 
-1.	View Profile 
-2.	Sell Book 
-3.	Buy Book 
-4.	Search for books in the stock 
-5.	Logout 
+1.	View Profile – displays name and address 
+2.	Sell Book – adds book to the stock 
+3.	Buy Book – removes book from the stock 
+4.	Search for books in the stock – filters books by book name, author name, genre or price. Also lets the user display all the books or end the program. 
+5.	Logout - lets the user logout of their account 
 If any number other than 1,2,3,4,5 is entered, you get an error message saying “WRONG CHOICE!!!!”. 
 
 If the user enters 3, the program ends. 
