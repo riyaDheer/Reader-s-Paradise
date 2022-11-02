@@ -1,4 +1,4 @@
-# Reader-s-Paradise- 
+# Reader's Paradise
 Once you enter Reader's Paradise, you get 3 options - 1 for Login, 2 for Sign up and 3 for exit. If any number other than 1,2,3 is entered, the user gets an error message saying “WRONG CHOICE!!!!”. 
 
 If the user enters 2, they enter sign up. The user enters their name, address and password. Password must be at least 10 characters otherwise it gives you an error message. The sign-up ends with a message that says “Congratulations! Your Account Has Been Created”. 
